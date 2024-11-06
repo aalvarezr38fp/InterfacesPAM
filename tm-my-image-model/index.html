@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>clasificador de partes del cuerpo por imagen</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+        }
+        #imagePreview {
+            max-width: 300px;
+            margin: 20px;
+        }
+        .result {
+            font-size: 20px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Sube la imagen de la parte del cuerpo a clasificar</h1>
+    <input type="file" accept="image/*" id="imageUpload">
+    <img id="imagePreview" src="" alt="Image Preview">
+    <div class="result" id="resultText">Predicción:</div>
+
+    <!-- Cargar TensorFlow.js y Teachable Machine -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.9.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.3/dist/teachablemachine-image.min.js"></script>
+
+    <script>
+        const URL = "./"; // Ruta de los archivos del modelo
+
+        let model, labelContainer;
+
+        async function init() {
+            try {
+                // Cargar el modelo
+                model = await tmImage.load(`${URL}model.json`, `${URL}metadata.json`);
+                labelContainer = document.getElementById("resultText");
+                console.log("Modelo cargado exitosamente");
+            } catch (error) {
+                console.error("Error loading the model:", error);
+                if (labelContainer) labelContainer.innerText = "Error loading the model. Check the console for details.";
+            }
+        }
+
+        document.getElementById("imageUpload").addEventListener("change", async function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const imageUrl = window.URL.createObjectURL(file);
+                document.getElementById("imagePreview").src = imageUrl;
+
+                // Esperar hasta que el modelo esté cargado
+                if (!model) {
+                    if (labelContainer) labelContainer.innerText = "Loading model...";
+                    await init();
+                }
+
+                const image = document.getElementById("imagePreview");
+
+                // Esperar a que la imagen esté cargada completamente antes de predecir
+                image.onload = async () => {
+                    try {
+                        const prediction = await model.predict(image);
+
+                        let highestProbability = 0;
+                        let resultText = "Unknown";
+                        for (let i = 0; i < prediction.length; i++) {
+                            if (prediction[i].probability > highestProbability) {
+                                highestProbability = prediction[i].probability;
+                                resultText = prediction[i].className;
+                            }
+                        }
+                        if (labelContainer) labelContainer.innerText = `Predicción: ${resultText}`;
+                    } catch (predictionError) {
+                        console.error("Error during prediction:", predictionError);
+                        if (labelContainer) labelContainer.innerText = "Error during prediction. Check console for details.";
+                    }
+                };
+            }
+        });
+
+        init();
+    </script>
+</body>
+</html>
