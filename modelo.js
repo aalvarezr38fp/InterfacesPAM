@@ -1,18 +1,19 @@
-'use strict'
+'use strict';
 
-class Modelo{
+export class Modelo {
+    #model = null;
+    #metadata = null;
 
-    #clientes =[]
-    
-    constructor(){
-        this.#clientes.push({
-            nombre: "Pepe",
-            edad: 25
-        })
-    
+    async cargarModelo(url) {
+        this.#model = await tmImage.load(`${url}model.json`, `${url}metadata.json`);
+        this.#metadata = this.#model.getMetadata();
     }
 
-    crearCliente(cliente){
+    async predecir(webcamElement) {
+        return await this.#model.predict(webcamElement);
     }
 
+    obtenerEtiquetas() {
+        return this.#metadata.labels;
+    }
 }
