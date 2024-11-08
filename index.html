@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html lang=es>
-
+<html lang="es">
 <head>
-	<meta charset=utf-8 />
-	<meta name=viewport content='width=device-width, initial-scale=1' />
-	<meta name=author content='Miguel Jaque <mjaque@migueljaque.com' />
-	<meta http-equiv="Cache-Control" content="no-store" />
-
-	<title>DI-UT2-POC1</title>
-
-	<link rel=stylesheet href=estilos.css />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reconocedor de partes del cuerpo</title>
+    <link rel="stylesheet" href="estilos.css">
 </head>
-
 <body>
-	<p>esttoo nooo  fffunciona</p>
-	<script type=module src=controladorprincipal.js></script>
+    <h1>Reconoce las partes del cuerpo con la webcam</h1>
+    <video id="webcam" autoplay playsinline></video>
+    <div class="result" id="resultText">Predicción:</div>
+    <button id="captureButton">Iniciar Captura</button>
+    <button id="resetButton" style="display: none;">Reiniciar Webcam</button>
+    <div class="slider-container">
+        <progress id="slider" class="slider" value="0" max="3"></progress>
+    </div>
+    <img id="capturedImage" class="captured-image" alt="Imagen Capturada" style="display: none;">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.9.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.3/dist/teachablemachine-image.min.js"></script>
+    <script type="module" src="controladorprincipal.js"></script>
 </body>
-
 </html>
-
