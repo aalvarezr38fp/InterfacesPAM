@@ -5,7 +5,9 @@ class ControladorPrincipal {
     #vista = null;
     #modelo = null;
     #predicting = true;
-    #lastPrediction = "";
+    #lastPrediction = "Desconocido";
+    #lastProbability = 0;
+    #umbralCerteza = 0.8; // Umbral de certeza ajustado a 80%
 
     constructor() {
         console.log('Iniciando la aplicación.');
@@ -21,8 +23,8 @@ class ControladorPrincipal {
             await this.setupWebcam();
             this.predictWebcam();
         } catch (error) {
-            console.error("Error loading the model or setting up webcam:", error);
-            this.#vista.mostrarMensaje("Error loading model or accessing webcam. Check console for details.");
+            console.error("Error al cargar el modelo o la webcam:", error);
+            this.#vista.mostrarMensaje("Error al cargar el modelo o acceder a la webcam.");
         }
     }
 
@@ -43,14 +45,23 @@ class ControladorPrincipal {
         while (this.#predicting) {
             const prediction = await this.#modelo.predecir(webcamElement);
             let highestProbability = 0;
-            let resultText = "Unknown";
-            for (let i = 0; i < prediction.length; i++) {
-                if (prediction[i].probability > highestProbability) {
-                    highestProbability = prediction[i].probability;
-                    resultText = prediction[i].className;
+            let resultText = "Desconocido";
+
+            prediction.forEach(pred => {
+                if (pred.probability > highestProbability) {
+                    highestProbability = pred.probability;
+                    resultText = pred.className;
                 }
+            });
+
+            // Forzar "Desconocido" si la predicción no es "Mano", "Ojo", "Boca" o "Oreja" o si la probabilidad es menor que el umbral
+            if (!["Mano", "Ojo", "Boca", "Oreja"].includes(resultText) || highestProbability < this.#umbralCerteza) {
+                resultText = "Desconocido";
             }
+
             this.#lastPrediction = resultText;
+            this.#lastProbability = highestProbability;
+            this.#vista.mostrarMensaje(`Predicción: ${this.#lastPrediction} (${(this.#lastProbability * 100).toFixed(2)}%)`);
             await new Promise(r => setTimeout(r, 500));
         }
     }
@@ -60,13 +71,13 @@ class ControladorPrincipal {
         this.#vista.actualizarSlider(0);
         const countdown = setInterval(() => {
             this.#vista.actualizarSlider(3 - timeLeft + 1);
-            timeLeft = timeLeft - 1;
+            timeLeft -= 1;
             if (timeLeft < 0) {
                 clearInterval(countdown);
                 this.#vista.capturarImagen();
                 this.#vista.ocultarVideo();
                 this.#predicting = false;
-                this.#vista.mostrarMensaje(`Predicción: ${this.#lastPrediction}`);
+                this.#vista.mostrarMensaje(`Predicción: ${this.#lastPrediction} (${(this.#lastProbability * 100).toFixed(2)}%)`);
                 this.#vista.mostrarBotonReinicio();
             }
         }, 1000);
