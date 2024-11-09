@@ -19,6 +19,7 @@ video {
 .result {
     font-size: 20px;
     margin-top: 10px;
+    min-height: 24px; /* Asegura que el contenedor tenga un tamaño fijo */
 }
 
 img {
