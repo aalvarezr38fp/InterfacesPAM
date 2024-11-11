@@ -1,41 +1,95 @@
+
 body {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100vh;
-    font-family: Arial, sans-serif;
-    background-color: lightblue;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to bottom right, #74b9ff, #a29bfe); /* Fondo en degradado */
+    color: #333;
+    margin: 0;
 }
+
 
 video {
-    width: 300px; 
+    width: 400px; 
     height: auto;
-    border: 2px solid #333;
-    border-radius: 8px;
-    margin-bottom: 10px;
+    border: 4px solid #0984e3;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
+
 
 .result {
-    font-size: 20px;
-    margin-top: 10px;
-    min-height: 24px; /* Asegura que el contenedor tenga un tamaño fijo */
+    font-size: 22px;
+    font-weight: bold;
+    color: #2d3436;
+    background-color: #dfe6e9;
+    padding: 10px 20px;
+    border-radius: 8px;
+    margin-top: 15px;
+    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    min-height: 28px; 
 }
+
 
 img {
-    width: 300px;
+    width: 400px;
     height: auto;
-    border: 2px solid #333;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    display: none; /* Inicialmente oculta */
+    border: 4px solid #6c5ce7;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    display: none; 
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
 
+
 .slider-container {
-    margin-top: 20px;
+    margin-top: 25px;
+    width: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+.slider-container input[type="range"] {
+    width: 100%;
+}
+
 
 .captured-image {
     max-width: 100%;
     height: auto;
+    border: 4px solid #636e72;
+    border-radius: 10px;
+}
+
+
+button {
+    font-size: 18px;
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    color: #fff;
+}
+
+#captureButton {
+    background-color: #00b894;
+}
+
+#captureButton:hover {
+    background-color: #00a17b;
+}
+
+#resetButton {
+    background-color: #d63031;
+}
+
+#resetButton:hover {
+    background-color: #b02d27;
 }
