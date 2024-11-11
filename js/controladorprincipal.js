@@ -7,7 +7,7 @@ class ControladorPrincipal {
     #predicting = true;
     #lastPrediction = "Desconocido";
     #lastProbability = 0;
-    #umbralCerteza = 0.8; // Umbral de certeza ajustado a 80%
+    #umbralCerteza = 0.6; // Umbral de certeza ajustado a 60%
 
     constructor() {
         console.log('Iniciando la aplicación.');
